@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title th:text="${wbeParameter.name}">网站后台管理系统 </title>
+    <link rel="icon" th:href="@{/resource/hospital.png}"/>
+    <link rel="shortcut icon" th:href="@{/resource/hospital.png}"/>
+    <link rel="stylesheet" th:href="@{/resource/css/normalize.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/resource/css/index.css}" type="text/css"/>
+    <script language="javascript" type="text/javascript" th:src="@{/resource/js/Kunyilibrary.js}"></script>
+</head>
+<body>
+<style>
+    .office-content {
+        -webkit-line-clamp: 3;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+<header class="header" th:replace="proscenium/public :: header"></header>
+<nav>
+    <div class="navBase">
+        <div class="quickMenuBase" data-type="1">
+            <div class="quickMenu01">快捷菜单</div>
+            <div class="quickMenu02 animated"></div>
+            <div class="quickMenus">
+                <ul class="firstUl">
+
+                    <li class="first">
+                        <a href="/appointmentReg" class="firstA">
+                            <em>预约挂号</em><i class="style02"></i><span></span>
+                        </a>
+                    </li>
+                    <li class="first"><a href="chuzhen.html" class="firstA"><em>出诊安排</em><i
+                            class="style03"></i><span></span></a>
+                        <div class="QMSub QMSubMenus">
+                            <ul>
+                                <li th:each="office,srt:${officeList}" th:if="${srt.index lt 6}">
+                                    <a th:href="${'/officeVisitPage?officeId='+office.id}" th:title="${office.name}"
+                                       th:text="${office.name}"><span>进入</span></a>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li th:each="office,srt:${officeList}" th:if="${srt.index gt 5 && srt.index lt 12}">
+                                    <a th:href="${'/officeVisitPage?officeId='+office.id}" th:title="${office.name}"
+                                       th:text="${office.name}"><span>进入</span></a>
+                                </li>
+                            </ul>
+                            <div class="clear"></div>
+                        </div>
+                    </li>
+                    <li class="first"><a href="/allDoctorPage" class="firstA"><em>专家介绍</em><i
+                            class="style04"></i><span></span></a>
+                    </li>
+                    <li class="first"><a class="firstA"><em>专科介绍</em><i
+                            class="style05"></i><span></span></a>
+                        <div class="QMSub QMSubMenus">
+                            <ul>
+                                <li th:each="office,srt:${officeList}" th:if="${srt.index lt 6}">
+                                    <a th:href="${'/officeDetailsPage?id='+office.id}" th:title="${office.name}"
+                                       th:text="${office.name}"><span>进入</span></a>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li th:each="office,srt:${officeList}" th:if="${srt.index gt 5 && srt.index lt 12}">
+                                    <a th:href="${'/officeDetailsPage?id='+office.id}" th:title="${office.name}"
+                                       th:text="${office.name}"><span>进入</span></a>
+                                </li>
+                            </ul>
+                            <div class="clear"></div>
+                        </div>
+                    </li>
+                    <li class="first"><a href="Office-9.html" class="firstA"><em>医疗快讯</em><i
+                            class="style06"></i><span></span></a>
+                        <div class="QMSub QMSubMenus">
+                            <ul>
+                                <li><a href="/noticePage" title="最新公告">最新公告<span>进入</span></a></li>
+                                <li><a href="/articlePage?type=省医快讯" title="省医快讯">省医快讯<span>进入</span></a></li>
+                            </ul>
+                            <div class="clear"></div>
+                        </div>
+                    </li>
+                    <li class="first last"><a href="/opinionsPage" class="firstA"><em>在线留言</em><i
+                            class="style07"></i><span></span></a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="nav Inav">
+            <ul>
+                <li class="PMenu"><a href="/diplomaProject" class="PAMenu">首页</a></li>
+                <li class="PMenu"><a href="/articlePage" class="PAMenu">新闻动态</a></li>
+                <li class="PMenu"><a href="/officePage" class="PAMenu">专科介绍</a></li>
+                <li class="PMenu"><a href="/allDoctorPage" class="PAMenu">专家介绍</a></li>
+                <li class="PMenu"><a href="/visitPage" class="PAMenu">出诊安排</a></li>
+                <li class="PMenu"><a href="/appointmentReg" class="PAMenu">预约挂号</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<section class="bannerBase BaseMark">
+    <div class="Banners">
+        <ul class="AnimUl">
+            <li><a><img th:src="@{/resource/images/2016032021254423.jpg}"/></a></li>
+            <li><a><img th:src="@{/resource/images/2016072719380487.jpg}"/></a></li>
+        </ul>
+        <div class="tools">
+            <a class="prev">
+                <img alt="上一幅" th:src="@{/resource/images/btn_prev01.png}" width="34" height="34"/>
+            </a>
+            <a class="next">
+                <img alt="下一幅" th:src="@{/resource/images/btn_next01.png}" width="34" height="34"/>
+            </a>
+            <div class="text" id="BannerInfo"></div>
+            <ul class="ulMark">
+                <li class="animated"></li>
+                <li class="animated"></li>
+            </ul>
+            <div class="clear"></div>
+            <div id="BannerSwitch" class="animated" data-type="0" data-right="0">
+                <img th:src="@{/resource/images/ico_027.png}" width="5" height="7" class="animated"><span>隐藏</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="NewsBase BaseMark">
+    <div class="tools">
+        <a target="_blank">
+            <img src="/resource/images/ico_001.gif" class="load" width="52" height="52"/><em>互联智慧分诊平台</em>
+        </a>
+        <a>
+            <img src="/resource/images/ico_002.gif" class="load" width="52" height="52"/><em><span>96195</span>综合平台</em>
+        </a>
+        <a>
+            <img src="/resource/images/ico_003.gif" class="load" width="52" height="52"/><em>名医馆</em>
+        </a>
+        <a class="last" href="/infoSearch">
+            <img src="/resource/images/ico_004.gif" class="load" width="52" height="52"/><em>信息查询</em>
+        </a>
+    </div>
+    <div class="noticeBase">
+        <div class="notice notice01"><a href="/articlePage?type=最新公告" class="more">更多</a>
+            <div class="title"><em>最新公告</em><span>Latest Announcement</span></div>
+            <div class="first" th:each="article,str:${articleList}" th:if="${str.count == 1 }">
+                <a><img src="/resource/images/pic_005.jpg" class="load" width="126" height="76"/></a>
+                <div>
+                    <span th:text="${#strings.substring(article.time,0,11)}"></span>
+                    <a th:href="${'/articleDetailsPage?id='+article.id}" th:text="${article.title}"></a>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <ul>
+                <li th:each="article,str:${articleList}" th:if="${str.count gt 1 }">
+                    <span th:text="${#strings.substring(article.time,0,11)}"></span>
+                    <a th:href="${'/articleDetailsPage?id='+article.id}" th:text="${article.title}"></a>
+                </li>
+            </ul>
+        </div>
+        <div class="notice notice02">
+            <a href="/articlePage?type=省医快讯" class="more">更多</a>
+            <div class="title"><em>省医快讯</em><span>Hospital News</span></div>
+            <div class="first" th:each="article,str:${articleList1}" th:if="${str.count == 1 }">
+                <a href=""><img src="/resource/images/pic_005.jpg" class="load" width="126" height="76"/></a>
+                <div>
+                    <span th:text="${#strings.substring(article.time,0,11)}"></span>
+                    <a th:href="${'/articleDetailsPage?id='+article.id}" th:text="${article.title}"></a>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <ul>
+                <li th:each="article,str:${articleList1}" th:if="${str.count gt 1 }">
+                    <span th:text="${#strings.substring(article.time,0,11)}">2016-12-29</span>
+                    <a th:href="${'/articleDetailsPage?id='+article.id}" th:text="${article.title}"></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="clear"></div>
+</section>
+<section class="doctorsBase BaseMark">
+    <div class="toolsBase">
+        <div class="title"><em>专家介绍</em> <span>Expert Introduction</span></div>
+        <div class="tools">
+            <a href="/allDoctorPage" class="Amore">更多 >></a>
+            <a href="javascript:;" class="Aprev"></a>
+            <a href="javascript:;" class="Anext"></a>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="contents">
+        <ul data-num="0">
+            <li th:each="doctor:${doctorList}">
+                <a class="img">
+                    <img th:src="@{${doctor.imgUrl}}" width="120" height="162"/>
+                </a>
+                <a class="name" th:text="${doctor.realName}">姓名</a>
+                <a th:href="${'/officeDetailsPage?id='+doctor.officeId}" class="office" th:text="${doctor.officeName}">所在医院医院</a>
+                <a class="post" th:text="${doctor.title}">主任医师 研究生导师</a>
+                <a th:href="${'/doctorDetailsPage?id='+doctor.id}" class="btn more">详细</a>
+                <a th:href="${'/appointmentReg?doctorId='+doctor.id}" class="btn date">预约</a>
+            </li>
+            <div class="hackR"></div>
+            <div class="hackL"></div>
+        </ul>
+    </div>
+</section>
+
+<section class="officesBase BaseMark">
+    <div class="toolsBase">
+        <div class="title"><em>重点专科</em> <span>Key Specialty</span></div>
+        <div class="tools">
+            <a href="/officePage" class="Amore">更多 >></a>
+            <a href="javascript:;" class="Aprev"></a>
+            <a href="javascript:;" class="Anext"></a>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="contents">
+        <ul data-num="0">
+            <li th:each="office:${officeList}"><i class="ico01"></i>
+                <div class="img animated"><img th:alt="${office.name}" th:src="@{${office.img}}" width="80" height="80"/>
+                </div>
+                <a th:href="${'/officeDetailsPage?id='+office.id}" th:alt="${office.name}" class="office"
+                   th:text="${office.name}">呼吸内科</a>
+                <p class="office-content" th:text="${office.content}">我科始建于上世纪70年代初，目前为卫生部国家重点专科建设项目单位，山西省重点……</p>
+                <a th:href="${'/officeDetailsPage?id='+office.id}" class="btn more">查看详细</a>
+                <a th:href="${'/doctorPage?officeId='+office.id}" class="btn doctor">科室专家</a>
+            </li>
+        </ul>
+        <div class="hackR"></div>
+        <div class="hackL"></div>
+    </div>
+    <div class="hiddenLineR"></div>
+    <div class="hiddenLineL"></div>
+</section>
+<div class="BottomHidden"></div>
+<footer th:replace="proscenium/public :: footer"></footer>
+
+<script language="javascript" type="text/javascript" th:src="@{/resource/js/Kunyi.Common.js}"></script>
+<script language="javascript" type="text/javascript" th:src="@{/resource/js/Kunyi.Index.js}"></script>
+</body>
+</html>

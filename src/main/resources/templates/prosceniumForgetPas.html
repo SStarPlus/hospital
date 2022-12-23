@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title th:text="${wbeParameter.name}">网站后台管理系统 </title>
+    <link rel="icon" href="/resource/hospital.png"/>
+    <link rel="stylesheet" href="/resource/css/normalize.css" type="text/css"/>
+    <link rel="stylesheet" href="/resource/css/secondary.css" type="text/css"/>
+    <link rel="stylesheet" href="/resource/common/layui/css/layui.css" media="all"/>
+    <script language="javascript" type="text/javascript" src="/resource/js/Kunyilibrary.js"></script>
+</head>
+<style>
+    .office-content {
+        -webkit-line-clamp: 3;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .main-yao {
+        width: 600px;
+        margin: 40px auto;
+    }
+
+    .red {
+        color: red;
+    }
+</style>
+<body style="font-size: 12px">
+<header class="header" th:replace="proscenium/public :: header"></header>
+<nav th:replace="proscenium/public :: nav"></nav>
+<section class="BaseMark">
+    <div class="bread">您所在的位置<span><a href="/diplomaProject">首页</a>>
+        <a></a> >找回密码</a></span>
+    </div>
+    <div class="layui-tab layui-tab-card">
+        <ul class="layui-tab-title">
+            <li class="layui-this"><a href="/prosceniumReg">找回密码</a></li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="main-yao layui-form">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="red">*&nbsp;</span>身份证号</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="userName" lay-verify="required|identity" lay-vertype="tips"
+                                   autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="red">*&nbsp;</span>电子邮件</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="toEmail" lay-verify="required|email" lay-vertype="tips"
+                                   autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button type="submit" class="layui-btn" lay-submit="" lay-filter="Submit"
+                                    style="background: #6bcbca">找回密码
+                            </button>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <p><a href="/">去登陆</a></p>
+                        </div>
+                    </div>
+                    <div class="layui-input-block">
+                        <ul class="layui-timeline">
+                            输入您的电子邮件地址，您的密码将通过电子邮件发送给您邮件账户
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-tab-item">2</div>
+        </div>
+    </div>
+    <div class="clear"></div>
+</section>
+<div class="BottomHidden"></div>
+<footer th:replace="proscenium/public :: footer"></footer>
+<script language="javascript" type="text/javascript" src="/resource/js/Kunyi.Common.js"></script>
+<script language="javascript" type="text/javascript" src="/resource/js/Kunyi.Secondary.js"></script>
+<script type="text/javascript" src="/resource/common/layui/layui.js"></script>
+
+<script type="text/javascript" th:inline="javascript">
+    layui.use(['table', 'layer', 'form'], function () {
+        var table = layui.table,
+            $ = layui.$,
+            layer = layui.layer,
+            form = layui.form;
+        form.on('submit(Submit)', function (data) {
+            $.ajax({
+                url: '/retrievePass',
+                type: 'post',
+                data: data.field,
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    if (!result.status) {
+                        layer.msg(result.msg, {time: 2000});
+                        return false;
+                    } else {
+                        layer.msg("密码已发送至邮箱!", {time: 2000});
+                        $('#toEmail').val("")
+                        $('#userName').val("")
+                    }
+                }
+
+            });
+        });
+
+    });
+</script>
+</body>
+</html>

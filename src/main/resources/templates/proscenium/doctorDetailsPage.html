@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title th:text="${wbeParameter.name}">网站后台管理系统 </title>
+    <link rel="icon" href="/resource/hospital.png"/>
+    <link rel="stylesheet" href="/resource/css/normalize.css" type="text/css"/>
+    <link rel="stylesheet" href="/resource/css/secondary.css" type="text/css"/>
+    <link rel="stylesheet" href="/resource/common/layui/css/layui.css" media="all"/>
+    <script language="javascript" type="text/javascript" src="/resource/js/Kunyilibrary.js"></script>
+</head>
+<style>
+    .office-content {
+        -webkit-line-clamp: 3;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .layui-table tr th {
+        color: #6bcbca !important;
+        font-family: 宋体;
+    }
+</style>
+<body style="font-size: 12px">
+<header class="header" th:replace="proscenium/public :: header"></header>
+<nav th:replace="proscenium/public :: nav"></nav>
+<section class="BaseMark">
+    <div class="bread">您所在的位置<span><a href="/diplomaProject">首页</a> > <a
+            th:href="${'/officeDetailsPage?id='+doctor.officeId}" th:text="${doctor.officeName}">呼吸内科</a> > 医生</span>
+    </div>
+    <div class="doctorLeft">
+        <img th:src="${doctor.imgUrl}" class="DThumb" width="112" height="150"/>
+        <h3 id="H3Name" th:text="${doctor.realName}">医生</h3>
+        <h4 id="H4Position" th:text="${doctor.title}"></h4>
+        <a th:href="${'/appointmentReg?doctorId='+doctor.id}"><img src="/resource/images/yuyue.png" width="22"
+                                                                   height="22">预约</a>
+    </div>
+    <div class="doctorRight">
+        <div class='import import1'></div>
+        <div class="title01"><h3>所在科室：</h3>
+            <h1 th:text="${doctor.officeName}"></h1><span>
+                <a th:href="${'/officeDetailsPage?id='+doctor.officeId}">进入科室</a>
+            </span>
+        </div>
+        <div class="clear"></div>
+        <div id="DIVContent" class="article intro">
+            <p style="text-align:left;" th:text="${doctor.content}"></p>
+        </div>
+        <div id="DIVOnDutyInfo" class="visitDate">
+            <div class="title">出诊安排<em>Visits Time</em></div>
+            <div class="visitList">
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th th:each="day:${dayBeginNow}" th:text="${day}">周一</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>上午(8:00-12:00)</td>
+                        <td th:each="day:${dayBeginNow}"><img width="30" src="/resource/images/chuzheng.png"
+                                                              class="jiuzhen"
+                                                              th:if="${#strings.contains(str,day+'上午')}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>下午(14:30-17:30)</td>
+                        <td th:each="day:${dayBeginNow}"><img width="30" src="/resource/images/chuzheng.png"
+                                                              class="jiuzhen"
+                                                              th:if="${#strings.contains(str,day+'下午')}">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</section>
+<div class="BottomHidden"></div>
+<footer th:replace="proscenium/public :: footer"></footer>
+<script language="javascript" type="text/javascript" src="/resource/js/Kunyi.Common.js"></script>
+<script language="javascript" type="text/javascript" src="/resource/js/Kunyi.Secondary.js"></script>
+</body>
+</html>

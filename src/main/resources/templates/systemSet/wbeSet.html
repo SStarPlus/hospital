@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>无标题文档</title>
+    <link rel="stylesheet" href="/resource/common/layui/css/layui.css" media="all"/>
+</head>
+
+<body>
+
+<div class="layui-form" style="padding: 40px">
+    <div class="layui-form-item">
+        <label class="layui-form-label">网站名称:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="name" th:value="${wbeParameter.name}" lay-verify="required" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">LOGO:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="logo" id="logo" th:value="${wbeParameter.logo}" lay-verify="required" readonly
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <span>建议尺寸168*168，支持jpg、png、gif，最大不能超过60KB(免费LOGO制作网站:https://www.logoko.com.cn/)</span>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input th:value="${wbeParameter.id}" name="id" hidden=""/>
+            <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="Submit">
+                保存
+            </button>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="operate">
+
+</script>
+<!--删除信息提示框自定义内容-->
+
+<script type="text/javascript" src="/resource/common/layui/layui.js"></script>
+<script type="text/javascript" src="/resource/js/jquery-2.2.0.min.js"></script>
+<script type="text/javascript" th:inline="javascript">
+    // 下拉框宽度设置
+    $(document).ready(function (e) {
+        $(".select3").uedSelect({
+            width: 152
+        });
+    });
+</script>
+<script type="text/javascript">
+    layui.use(['table', 'layer', 'laydate', 'upload', 'form'], function () {
+        var table = layui.table,
+            $ = layui.$,
+            layer = layui.layer,
+            upload = layui.upload,
+            form = layui.form;
+        upload.render({
+            elem: '#logo'
+            , url: '/upload.do'
+            , done: function (res) {
+                layer.msg('上传成功');
+                console.log(res)
+                $("#logo").val(res.obje);
+            }
+        });
+        form.on('submit(Submit)', function (data) {
+            $.ajax({
+                url: '/wbeSet/wbeParameter.do',
+                type: 'put',
+                data: data.field,
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    if (!result.status) {
+                        layer.msg(result.msg, {time: 2000});
+                        return false;
+                    } else {
+                        layer.msg("修改成功!", {time: 1000});
+                    }
+                }
+
+            });
+        });
+    });
+
+</script>
+
+</body>
+
+</html>

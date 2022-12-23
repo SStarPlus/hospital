@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title th:text="${wbeParameter.name}">网站后台管理系统 </title>
+    <link rel="icon" href="/resource/hospital.png"/>
+    <link rel="stylesheet" href="/resource/css/normalize.css" type="text/css"/>
+    <link rel="stylesheet" href="/resource/css/secondary.css" type="text/css"/>
+    <script language="javascript" type="text/javascript" src="/resource/js/Kunyilibrary.js"></script>
+</head>
+<style>
+    .office-content {
+        -webkit-line-clamp: 3;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+<body>
+<header class="header" th:replace="proscenium/public :: header"></header>
+<nav th:replace="proscenium/public :: nav"></nav>
+<section class="BaseMark PartBanner">
+    <div class="introLeft">
+        <div class="lefttitle">科室栏目<span>Column sections</span></div>
+        <ul>
+            <li><a th:href="${'/doctorPage?officeId='+office.id}">专家介绍</a></li>
+            <li><a th:href="${'/officeVisitPage?officeId='+office.id}" title="工作动态">出诊安排</a></li>
+        </ul>
+        <div class="clear"></div>
+    </div>
+    <div class="bannerLeft">
+        <img th:src='${office.bigImg}' th:alt='${office.name}'/><span class='import1'></span>
+    </div>
+    <div class="bannerRight">
+        <div class="righttitle">
+            <h1 th:text='${office.name}'></h1>
+            <div class="clear"></div>
+        </div>
+        <div class="rightbtn">
+            <a th:href="${'/officeVisitPage?officeId='+office.id}" class="green">出诊安排</a>
+            <a class="blue" href="/officePage">返回科室导航</a>
+        </div>
+        <div class="righttel"><h2 id="H2Tel"></h2>
+            <h3>本科室电话 <em th:text="${office.iphone}"></em></h3></div>
+    </div>
+    <div class="clear"></div>
+</section>
+
+<section class="BaseMark PartIntro">
+    <div class="introLeft">
+        <div class="lefttitle">科室栏目<span>Column sections</span></div>
+        <ul>
+            <li><a th:href="${'/doctorPage?officeId='+office.id}">专家介绍</a></li>
+            <li><a th:href="${'/officeVisitPage?officeId='+office.id}" title="工作动态">出诊安排</a></li>
+        </ul>
+        <div class="clear"></div>
+    </div>
+    <div class="introRight">
+        <div class="left"><img style="background: #6bcbca;width: 80px;height: 80px" th:src='${office.img}'/>
+            <h3>科室简介</h3><h4>INTRODUCTION</h4></div>
+        <div class="right">
+            <h1 id="H1Type" th:text='${office.name}'></h1>
+            <p th:text='${office.content}'></p>
+        </div>
+    </div>
+    <div class="clear"></div>
+</section>
+
+<section id="AreaDoctors" class="BaseMark doctorsBase partDoctor">
+    <div class="toolsPart">
+        <div class="title">专家介绍<span>Expert Introduction</span></div>
+        <div class="tools">
+            <a th:href="${'/doctorPage?officeId='+office.id}" class="Bmore">MORE 》》</a>
+            <a href="javascript:;" class="Aprev"></a>
+            <a href="javascript:;" class="Anext"></a>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="contents">
+        <ul data-num="0">
+            <li th:each="doctor:${doctorList}">
+                <a class="img">
+                    <img th:src="${doctor.imgUrl}" width="120" height="162"/>
+                </a>
+                <a class="name" th:text="${doctor.realName}">医生</a>
+                <a class="office" th:text="${office.name}">呼吸内科</a>
+                <a class="post" th:text="${doctor.title}">主任医师，科主任</a>
+                <a th:href="${'/doctorDetailsPage?id='+doctor.id}" class="btn more">详细</a>
+                <a th:href="${'/appointmentReg?doctorId='+doctor.id}" class="btn date">预约</a>
+            </li>
+        </ul>
+        <div class="hackR"></div>
+        <div class="hackL"></div>
+    </div>
+</section>
+<div class="BottomHidden"></div>
+<footer th:replace="proscenium/public :: footer"></footer>
+<script language="javascript" type="text/javascript" src="/resource/js/Kunyi.Common.js"></script>
+<script language="javascript" type="text/javascript" src="/resource/js/Kunyi.Secondary.js"></script>
+</body>
+</html>

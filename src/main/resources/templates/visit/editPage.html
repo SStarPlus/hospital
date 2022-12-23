@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="/resource/common/layui/css/layui.css" media="all"/>
+</head>
+<style>
+    .lable-span {
+        color: #ea2020;
+        padding-left: 3px
+    }
+
+    .layui-form-radio > i {
+        font-size: 15px;
+    }
+
+    .laydate_body .laydate_top {
+        width: 100%;
+    }
+</style>
+<body>
+<div class="layui-form" style="padding: 20px">
+    <div class="layui-form-item">
+        <label class="layui-form-label">医生:</label>
+        <div class="layui-input-block">
+            <select name="doctorId" id="doctorId" lay-verify="required" lay-vertype="tips">
+                <option th:each="doctor:${doctorList}" th:text="${doctor.realName}" th:value="${doctor.id}"
+                        th:selected="${doctor.id eq visit.doctorId}"></option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">总挂号数:</label>
+        <div class="layui-input-block">
+            <input type="number" name="zum" th:value="${visit.zum}" lay-verify="required" lay-vertype="tips"
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">日期:</label>
+        <div class="layui-input-block">
+            <input type="text" name="day" id="day" th:value="${visit.day}" lay-verify="required" lay-vertype="tips"
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">上午/下午:</label>
+        <div class="layui-input-block">
+            <select name="type" lay-verify="required" lay-vertype="tips">
+                <option></option>
+                <option th:selected="${ visit.type eq '上午'}">上午</option>
+                <option th:selected="${visit.type eq '下午'}">下午</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <p style="font-size: 13px;color: #307ecc">注:安排时间请选择当日及以后的日期,之前的日期前台不显示</p>
+        </div>
+    </div>
+    <div class="layui-form-item" style="position: fixed;bottom: 0px;right: 10px;">
+        <div class="layui-input-block">
+            <input hidden name="id" th:value="${visit.id}">
+            <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="Submit">保存内容</button>
+            <button type="" class="layui-btn layui-btn-primary close">取消</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/resource/js/assets/laydate/laydate.js"></script>
+<script type="text/javascript" src="/resource/common/layui/layui.js"></script>
+<script type="text/javascript" th:inline="javascript">
+
+    layui.use(['table', 'layer', 'form'], function () {
+        var table = layui.table,
+            $ = layui.$,
+            layer = layui.layer,
+            laydate = layui.laydate,
+            form = layui.form;
+        var doctorList = [[${doctorList}]]
+        $('.close').on('click', function () {
+            parent.layer.close(parent.layer.getFrameIndex(window.name));
+        })
+        form.on('submit(Submit)', function (data) {
+            $.ajax({
+                url: '/visit/visit.do',
+                type: 'put',
+                data: data.field,
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    if (result.status) {
+                        parent.layer.msg("编辑成功!", {time: 1000});
+                        parent.layer.close(parent.layer.getFrameIndex(window.name));
+                        parent.layui.table.reload('tableId', {});
+                    } else {
+                        layer.msg(result.msg);
+                    }
+                }
+
+            });
+        });
+    });
+    laydate({
+        elem: '#day',
+        event: 'focus',
+
+    });
+</script>
+</body>
+</html>

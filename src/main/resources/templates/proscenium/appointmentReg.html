@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title th:text="${wbeParameter.name}">网站后台管理系统 </title>
+    <link rel="icon" th:href="@{/resource/hospital.png}"/>
+    <link rel="stylesheet" th:href="@{/resource/css/normalize.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/resource/css/secondary.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/resource/common/layui/css/layui.css}" media="all"/>
+    <script language="javascript" type="text/javascript" th:src="@{/resource/js/Kunyilibrary.js}"></script>
+</head>
+<style>
+
+    .layui-input {
+        margin-top: 5px;
+    }
+
+    .layui-table tr th {
+        color: #6bcbca !important;
+        font-family: 微软雅黑;
+    }
+</style>
+<body style="font-size: 12px;">
+<header class="header" th:replace="proscenium/public :: header"></header>
+<nav th:replace="proscenium/public :: nav"></nav>
+<section class="BaseMark">
+    <div class="bread">您所在的位置<span><a href="/diplomaProject">首页</a>><a>预约挂号</a></span></div>
+    <div class="baseLeft">
+        <div class="tools">
+            <a>
+                <img src="/resource/images/ico_001.gif" width="52" height="52"><em>互联智慧分诊平台</em>
+            </a>
+            <a style="margin-right:0;">
+                <img src="/resource/images/ico_002.gif" width="52" height="52"><em><span>96195</span> 综合平台</em>
+            </a>
+            <a>
+                <img src="/resource/images/ico_003.gif" width="52" height="52"><em>名医馆</em>
+            </a>
+            <a style="margin-right:0;" href="/infoSearch" class="last">
+                <img src="/resource/images/ico_004.gif" width="52" height="52"><em>信息查询</em>
+            </a>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div class="baseRight">
+        <div class="title01">预约挂号</div>
+        <div class="Expert layui-form" style="padding-top: 20px">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">科室</label>
+                    <div class="layui-input-inline">
+                        <select id="officeId">
+                            <option></option>
+                            <option th:each="office:${officeList}" th:value="${office.id}"
+                                    th:text="${office.name}" th:selected="${office.id  eq officeId}"></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">上午/下午</label>
+                    <div class="layui-input-inline">
+                        <select id="type">
+                            <option></option>
+                            <option th:selected="${type  eq '上午'}">上午</option>
+                            <option th:selected="${type  eq '下午'}">下午</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <button class="layui-btn-sm layui-btn search" style="width: 100px;background: #6bcbca">查询
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th>科室</th>
+                    <th>日期</th>
+                    <th>星期</th>
+                    <th>上午/下午</th>
+                    <th>医生</th>
+                    <th>剩余挂号数</th>
+                    <th>预约挂号</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="visit:${visitList}">
+                    <td th:text="${visit.officeName}"></td>
+                    <td th:text="${visit.day}"></td>
+                    <td th:text="${visit.week}"></td>
+                    <td th:text="${visit.type}"></td>
+                    <td th:text="${visit.doctorName}">人生似修行</td>
+                    <td th:text="${visit.zum-visit.number}">人生似修行</td>
+                    <td>
+                        <button class="layui-btn-sm layui-btn registration" th:id="${visit.id}"
+                                style="width: 100px;background: #6bcbca">挂号
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</section>
+<div class="BottomHidden"></div>
+<footer th:replace="proscenium/public :: footer"></footer>
+<script language="javascript" type="text/javascript" th:src="@{/resource/js/Kunyi.Common.js}"></script>
+<script language="javascript" type="text/javascript" th:src="@{/resource/js/Kunyi.Secondary.js}"></script>
+<script type="text/javascript" th:src="@{/resource/common/layui/layui.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    layui.use(['table', 'layer', 'form'], function () {
+        var table = layui.table,
+            $ = layui.$,
+            layer = layui.layer,
+            form = layui.form;
+        //查询
+        $('.search').on('click', function () {
+            var officeId = $('#officeId').val();
+            var type = $('#type').val();
+            location.href = '/appointmentReg?officeId=' + officeId + '&type=' + type;
+        })
+        $('.registration').on('click', function () {
+            var visitId = $(this).attr("id");
+            layer.open({
+                content: "/registration/addPage.do?visitId=" + visitId,
+                title: "病情描述",
+                area: ['500px', '500px'],
+                type: 2,
+                maxmin: true,
+                shadeClose: true
+            });
+        })
+    });
+</script>
+</body>
+</html>

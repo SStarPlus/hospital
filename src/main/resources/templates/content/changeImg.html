@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="/resource/common/layui/css/layui.css" media="all"/>
+</head>
+<body>
+<div class="layui-form" style="padding: 40px">
+    <div style="text-align: center">
+        <div class="layui-upload-drag" id="upImg">
+            <i class="layui-icon" style="color: #307ecc">&#xe64a;</i>
+            <p>建议尺寸168*168，支持jpg、png、gif，最大不能超过60KB</p>
+            <div class="layui-hide" id="uploadDemoView">
+                <hr>
+                <img src="" alt="上传成功后渲染" style="max-width: 196px">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item" style="position: fixed;bottom: 0px;right: 10px">
+        <div class="layui-input-block">
+            <input th:value="${user.id}" name="id" hidden=""/>
+            <input th:value="${user.imgUrl}" id="imgUrl" name="imgUrl" hidden=""/>
+            <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="Submit">保存内容</button>
+            <button type="" class="layui-btn layui-btn-primary close">取消</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/resource/common/layui/layui.js"></script>
+<script type="text/javascript">
+    layui.use(['table', 'layer', 'laydate', 'form', 'upload'], function () {
+        var table = layui.table,
+            $ = layui.$,
+            layer = layui.layer,
+            upload = layui.upload,
+            form = layui.form;
+        $('.close').on('click', function () {
+            parent.layer.close(parent.layer.getFrameIndex(window.name));
+        })
+        //拖拽上传
+        upload.render({
+            elem: '#upImg'
+            , url: '/upload.do'
+            , size: 60
+            , done: function (res) {
+                layer.msg('上传成功');
+                console.log(res)
+                layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', res.obje);
+                $("#imgUrl").val(res.obje);
+            }
+        });
+        form.on('submit(Submit)', function (data) {
+            data.field.status = "1"
+            $.ajax({
+                url: '/user/user.do',
+                type: 'put',
+                data: data.field,
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    if (!result.status) {
+                        parent.layer.msg(result.msg, {time: 2000});
+                        return false;
+                    } else {
+                        parent.layer.msg("修改成功!", {time: 1000});
+                        parent.layer.close(parent.layer.getFrameIndex(window.name));
+                        parent.layui.table.reload('tableId', {});
+                        parent.window.location.reload()
+                    }
+                }
+
+            });
+        });
+    });
+
+</script>
+</body>
+</html>

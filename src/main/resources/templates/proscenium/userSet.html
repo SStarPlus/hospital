@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title th:text="${wbeParameter.name}">网站后台管理系统 </title>
+    <link rel="icon" href="/resource/hospital.png"/>
+    <link rel="stylesheet" href="/resource/css/normalize.css" type="text/css"/>
+    <link rel="stylesheet" href="/resource/css/secondary.css" type="text/css"/>
+    <link rel="stylesheet" href="/resource/common/layui/css/layui.css" media="all"/>
+    <script language="javascript" type="text/javascript" src="/resource/js/Kunyilibrary.js"></script>
+</head>
+<style>
+    .office-content {
+        -webkit-line-clamp: 3;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+<body style="font-size: 12px">
+<header class="header" th:replace="proscenium/public :: header"></header>
+<nav th:replace="proscenium/public :: nav"></nav>
+<section class="BaseMark">
+    <div class="bread">您所在的位置<span><a href="/diplomaProject">首页</a>>
+        <a></a> >个人中心</a></span>
+    </div>
+    <div class="baseLeft">
+        <div class="partLeft">
+            <div class="title partTitle"><a>个人信息</a></div>
+            <div class="newsMenu depmMenu">
+                <ul>
+                    <li class="first"><a href="/userCenter"><em>挂号记录</em></a></li>
+                    <li class="active"><a href="/userSet"><em>个人信息</em></a></li>
+                    <li><a href="/safety"><em>安全设置</em></a></li>
+                    <li><a href="/messagePage"><em>消息中心</em></a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="tools">
+            <a>
+                <img src="/resource/images/ico_001.gif" width="52" height="52"><em>互联智慧分诊平台</em>
+            </a>
+            <a style="margin-right:0;" >
+                <img src="/resource/images/ico_002.gif" width="52" height="52"><em><span>96195</span> 综合平台</em>
+            </a>
+            <a >
+                <img src="/resource/images/ico_003.gif" width="52" height="52"><em>名医馆</em>
+            </a>
+            <a style="margin-right:0;" href="/infoSearch" class="last">
+                <img src="/resource/images/ico_004.gif" width="52" height="52"><em>信息查询</em>
+            </a>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div class="partRight">
+        <div class="title01">个人信息</div>
+        <div class="Expert layui-form" style="padding-top: 40px;width: 50%">
+            <div class="layui-form-item">
+                <label class="layui-form-label">身份证号:</label>
+                <div class="layui-input-block">
+                    <input type="text" th:value="${user.userName}" disabled lay-verify="required" autocomplete="off"
+                           class="layui-input layui-disabled">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">性别:</label>
+                <div class="layui-input-block">
+                    <select name="sex">
+                        <option value="男" th:selected="${user.sex eq '男'}">男</option>
+                        <option value="女" th:selected="${user.sex eq '女'}">女</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">姓氏:</label>
+                <div class="layui-input-block">
+                    <input type="text" name="realName" th:value="${user.realName}" lay-verify="title" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">手机:</label>
+                <div class="layui-input-block">
+                    <input type="text" name="iphone" th:value="${user.iphone}" lay-verify="phone" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">E-mail:</label>
+                <div class="layui-input-block">
+                    <input type="text" name="email" th:value="${user.email}" lay-verify="email" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">联系地址:</label>
+                <div class="layui-input-block">
+                    <input type="text" name="address" th:value="${user.address}" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <input th:value="${user.id}" name="id" hidden=""/>
+                    <button class="layui-btn layui-btn-normal" style="width: 200px;background: #6bcbca" lay-submit=""
+                            lay-filter="Submit">
+                        保存内容
+                    </button>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</section>
+<div class="BottomHidden"></div>
+<footer th:replace="proscenium/public :: footer"></footer>
+<script language="javascript" type="text/javascript" src="/resource/js/Kunyi.Common.js"></script>
+<script language="javascript" type="text/javascript" src="/resource/js/Kunyi.Secondary.js"></script>
+<script type="text/javascript" src="/resource/common/layui/layui.js"></script>
+<script type="text/javascript">
+    layui.use(['table', 'layer', 'laydate', 'form'], function () {
+        var table = layui.table,
+            $ = layui.$,
+            layer = layui.layer,
+            form = layui.form;
+        $('.close').on('click', function () {
+            parent.layer.close(parent.layer.getFrameIndex(window.name));
+        })
+        form.on('submit(Submit)', function (data) {
+            data.field.status = "1"
+            $.ajax({
+                url: '/user/user.do',
+                type: 'put',
+                data: data.field,
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    if (!result.status) {
+                        parent.layer.msg(result.msg, {time: 2000});
+                        return false;
+                    } else {
+                        parent.layer.msg("修改成功!", {time: 1000});
+                        parent.layer.close(parent.layer.getFrameIndex(window.name));
+                        parent.layui.table.reload('tableId', {});
+                    }
+                }
+
+            });
+        });
+    });
+
+</script>
+</body>
+</html>

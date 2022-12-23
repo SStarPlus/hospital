@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link href="/resource/css/assets/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/resource/css/style.css" rel="stylesheet"/>
+    <link href="/resource/css/assets/codemirror.css" rel="stylesheet">
+    <link rel="stylesheet" href="/resource/css/assets/ace.min.css"/>
+    <link rel="stylesheet" href="/resource/font/css/font-awesome.min.css"/>
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/resource/css/order/ace-ie.min.css"/>
+    <![endif]-->
+    <script src="/resource/js/jquery-1.9.1.min.js"></script>
+    <script src="/resource/js/assets/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/resource/js/Validform.min.js"></script>
+    <script src="/resource/js/assets/typeahead-bs2.min.js"></script>
+    <script src="/resource/js/lrtk.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="/resource/common/layui/css/layui.css" media="all"/>
+    <title></title>
+</head>
+
+<body>
+<div class="page-content clearfix">
+    <div class="administrator">
+        <div class="d_Confirm_Order_style">
+            <div class="search_style">
+                <ul class="search_content clearfix">
+                    <li><label class="l_f">身份证号:</label>
+                        <input type="text" id="userName" class="text_add" autocomplete="off"
+                               style="width:200px"/>
+                    </li>
+                    <li><label class="l_f">姓名:</label>
+                        <input type="text" id="name" class="text_add" autocomplete="off"
+                               style="width:200px"/>
+                    </li>
+                    <li><label class="l_f">时间</label>
+                        <input type="text" id="day" class="text_add laydate-icon" autocomplete="off"
+                               style="width:200px"/>
+                    </li>
+                    <li style="width:200px;">
+                        <button type="button" class="btn_search search"><i class="fa fa-search"></i>查询</button>
+                        <button type="button" class="btn_search revocation"><i
+                                class="layui-icon layui-icon-refresh"></i>撤销
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <div class="clearfix administrator_style" id="administrator">
+                <div class="compete_list" id="testIframe">
+                    <table id="table-list" data-mobile-responsive="true" lay-filter="table-list"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="operate">
+    {{#  if(d.state=='0'){ }}
+    <a title="编辑" class="btn btn-xs btn-info" lay-event="edit" style="padding: 0px 10px"><i
+            class="fa fa-edit bigger-120"></i></a>
+    {{#  } }}
+    <a title="删除" class="btn btn-xs btn-warning" lay-event="del" style="padding: 0px 10px"><i
+            class="fa fa-trash  bigger-120"></i></a>
+</script>
+<script type="text/html" id="dayTpl">
+    <span style="cursor: pointer;color: #428bca">{{d.day}}/{{d.week}}/{{d.type}}</span>
+</script>
+<script type="text/html" id="stateTpl">
+    {{#  if(d.state=='0'){ }}
+    <span style="cursor: pointer;color: #FF5722">未就诊</span>
+    {{#  } else { }}
+    <span style="cursor: pointer;color: #5FB878">已就诊</span>
+    {{#  } }}
+</script>
+</body>
+</html>
+<script type="text/javascript" src="/resource/common/layui/layui.js"></script>
+<script type="text/javascript" src="/resource/js/assets/laydate/laydate.js"></script>
+<script type="text/javascript" th:inline="javascript">
+    layui.use(['table', 'layer', 'form'], function () {
+        var table = layui.table,
+            $ = layui.$,
+            layer = layui.layer,
+            form = layui.form;
+        var tableIns = table.render({
+            elem: '#table-list'
+            , even: true
+            , url: '/registration/registration.do' //数据接口
+            , method: 'get'
+            , page: true //开启分页
+            , id: 'tableId'
+            , smartReloadModel: true
+            , limits: [10, 15, 30]
+            , limit: 15
+            , cols: [
+                [
+                    {field: 'userName', title: '身份证号'},
+                    {field: 'name', title: '姓名'},
+                    {field: 'description', title: '病情描述'},
+                    {field: 'day', title: '就诊时间', templet: "#dayTpl"},
+                    {field: 'time', title: '预约时间'},
+                    {field: 'state', title: '状态', templet: "#stateTpl"},
+                    {title: '操作', fixed: 'right', width: 220, align: 'center', toolbar: '#operate'}
+                ]
+            ]
+        });
+        //监听工具条
+        table.on('tool(table-list)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('确定要删除吗?', function (index) {
+                    $.ajax({
+                        url: "/registration/registration.do",
+                        type: "post",
+                        data: {_method: "DELETE", "id": data.id},
+                        dataType: "json",
+                        success: function (result) {
+                            if (!result.status) {
+                                layer.msg(result.msg, {time: 2000});
+                                return false;
+                            }
+                            layer.msg("删除成功!", {time: 1000});
+                            active.reload();
+                        }
+                    });
+                    layer.close(index);
+                })
+            } else if (obj.event === 'edit') {
+                layer.open({
+                    content: "/case/addPage.do?regId=" + data.id,
+                    title: "病例信息",
+                    area: ['50%', '90%'],
+                    type: 2,
+                    maxmin: true,
+                    shadeClose: true
+                });
+            }
+        });
+        //搜索
+        $('.search').on('click', function () {
+            active.reload()
+        });
+        //撤销
+        $(".revocation").on('click', function () {
+            $("#name").val("");
+            $("#day").val("");
+            $("#userName").val("");
+            form.render();
+            active.reload()
+        });
+        active = {
+            reload: function () {
+                var name = $("#name").val();
+                var day = $("#day").val();
+                var userName = $("#userName").val();
+                //执行重载
+                table
+                    .reload('tableId', {
+                        where: {
+                            name: name,
+                            userName: userName,
+                            day: day,
+                        }
+                    });
+            }
+        };
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+        $("#administrator").fix({
+            float: 'left',
+            //minStatue : true,
+            skin: 'green',
+            durationTime: false,
+            spacingw: 50,//设置隐藏时的距离
+            spacingh: 270,//设置显示时间距
+        });
+    });
+    //初始化宽度、高度
+    $(".widget-box").height($(window).height() - 215);
+    $(".table_menu_list").width($(window).width() - 260);
+    $(".table_menu_list").height($(window).height() - 215);
+    //当文档窗口发生改变时 触发
+    $(window).resize(function () {
+        $(".widget-box").height($(window).height() - 215);
+        $(".table_menu_list").width($(window).width() - 260);
+        $(".table_menu_list").height($(window).height() - 215);
+    })
+    laydate({
+        elem: '#day',
+        event: 'focus',
+    });
+</script>

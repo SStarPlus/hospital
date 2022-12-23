@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="/resource/common/layui/css/layui.css" media="all"/>
+</head>
+<style>
+    .lable-span {
+        color: #ea2020;
+        padding-left: 3px
+    }
+
+    .layui-form-radio > i {
+        font-size: 15px;
+    }
+
+    .laydate_body .laydate_top {
+        width: 100%;
+    }
+</style>
+<body>
+<div class="layui-form" style="padding: 20px">
+    <div class="layui-form-item">
+        <label class="layui-form-label">身份证号:</label>
+        <div class="layui-input-block">
+            <input type="text" name="userName" th:value="${registration.userName}" lay-verify="required"
+                   lay-vertype="tips" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名:</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" th:value="${registration.name}" lay-verify="required" lay-vertype="tips"
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">年龄:</label>
+        <div class="layui-input-block">
+            <input type="number" name="age" min="1" lay-verify="required" lay-vertype="tips" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">性别:</label>
+        <div class="layui-input-block">
+            <select name="sex" lay-verify="required" lay-vertype="tips">
+                <option></option>
+                <option>男</option>
+                <option>女</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">症状主述:</label>
+        <div class="layui-input-block">
+            <textarea class="layui-textarea" name="selfSay" lay-verify="required" lay-vertype="tips"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">诊断结果:</label>
+        <div class="layui-input-block">
+            <textarea class="layui-textarea" name="consequence" lay-verify="required" lay-vertype="tips"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">治疗方案:</label>
+        <div class="layui-input-block">
+            <textarea class="layui-textarea" name="scheme" lay-verify="required" lay-vertype="tips"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item" style="position: fixed;bottom: 0px;right: 10px;">
+        <div class="layui-input-block">
+            <input hidden name="regId" th:value="${registration.id}">
+            <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="Submit">保存内容</button>
+            <button type="" class="layui-btn layui-btn-primary close">取消</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/resource/js/assets/laydate/laydate.js"></script>
+<script type="text/javascript" src="/resource/common/layui/layui.js"></script>
+<script type="text/javascript" th:inline="javascript">
+
+    layui.use(['table', 'layer', 'form'], function () {
+        var table = layui.table,
+            $ = layui.$,
+            layer = layui.layer,
+            laydate = layui.laydate,
+            form = layui.form;
+        var doctorList = [[${doctorList}]]
+        $('.close').on('click', function () {
+            parent.layer.close(parent.layer.getFrameIndex(window.name));
+        })
+        form.on('submit(Submit)', function (data) {
+            $.ajax({
+                url: '/case/case.do',
+                type: 'post',
+                data: data.field,
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    if (result.status) {
+                        parent.layer.msg("操作成功!", {time: 1000});
+                        parent.layer.close(parent.layer.getFrameIndex(window.name));
+                        parent.layui.table.reload('tableId', {});
+                    } else {
+                        layer.msg(result.msg);
+                    }
+                }
+
+            });
+        });
+    });
+    laydate({
+        elem: '#day',
+        event: 'focus',
+
+    });
+</script>
+</body>
+</html>

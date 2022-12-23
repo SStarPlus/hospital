@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title th:text="${wbeParameter.name}">网站后台管理系统 </title>
+    <link rel="icon" href="/resource/hospital.png"/>
+    <link rel="stylesheet" href="/resource/css/normalize.css" type="text/css"/>
+    <link rel="stylesheet" href="/resource/css/secondary.css" type="text/css"/>
+    <link rel="stylesheet" href="/resource/common/layui/css/layui.css" media="all"/>
+    <script language="javascript" type="text/javascript" src="/resource/js/Kunyilibrary.js"></script>
+</head>
+<style>
+    .office-content {
+        -webkit-line-clamp: 3;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .layui-elem-quote {
+        border-left: 5px solid #6bcbca;
+    }
+</style>
+<body style="font-size: 12px">
+<header class="header" th:replace="proscenium/public :: header"></header>
+<nav th:replace="proscenium/public :: nav"></nav>
+<section class="BaseMark">
+    <div class="bread">您所在的位置<span><a href="/diplomaProject">首页</a>>
+        <a></a> >个人中心</a></span>
+    </div>
+    <div class="baseLeft">
+        <div class="partLeft">
+            <div class="title partTitle"><a>个人信息</a></div>
+            <div class="newsMenu depmMenu">
+                <ul>
+                    <li class="first"><a href="/userCenter"><em>挂号记录</em></a></li>
+                    <li><a href="/userSet"><em>个人信息</em></a></li>
+                    <li><a href="/safety"><em>安全设置</em></a></li>
+                    <li class="active"><a href="/messagePage"><em>消息中心</em></a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="tools">
+            <a>
+                <img src="/resource/images/ico_001.gif" width="52" height="52"><em>互联智慧分诊平台</em>
+            </a>
+            <a style="margin-right:0;">
+                <img src="/resource/images/ico_002.gif" width="52" height="52"><em><span>96195</span> 综合平台</em>
+            </a>
+            <a>
+                <img src="/resource/images/ico_003.gif" width="52" height="52"><em>名医馆</em>
+            </a>
+            <a style="margin-right:0;" href="/infoSearch" class="last">
+                <img src="/resource/images/ico_004.gif" width="52" height="52"><em>信息查询</em>
+            </a>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div class="partRight">
+        <div class="title01">消息中心</div>
+        <div class="Expert" style="padding-top: 40px;">
+            <div th:if="${#lists.isEmpty(messageList)}" class="fly-none">您暂时没有最新消息</div>
+            <blockquote class="layui-elem-quote" th:if="not ${#lists.isEmpty(messageList)}"
+                        th:each="message:${messageList}">
+                <p th:utext="${message.content}"></p>
+                <p><span th:utext="${#strings.substring(message.time,0,19)}">1小时前</span>
+                    <a th:id="${message.id}" href="javascript:;" class="fly-delete"><i
+                            class="layui-icon layui-icon-delete"></i></a>
+                </p>
+            </blockquote>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</section>
+<div class="BottomHidden"></div>
+<footer th:replace="proscenium/public :: footer"></footer>
+<script language="javascript" type="text/javascript" src="/resource/js/Kunyi.Common.js"></script>
+<script language="javascript" type="text/javascript" src="/resource/js/Kunyi.Secondary.js"></script>
+<script type="text/javascript" src="/resource/common/layui/layui.js"></script>
+<script type="text/javascript">
+    layui.use(['table', 'layer', 'laydate', 'form'], function () {
+        var table = layui.table,
+            $ = layui.$,
+            layer = layui.layer,
+            form = layui.form;
+        //删除消息
+        $('.fly-delete').on('click', function () {
+            var id = $(this).attr('id');
+            var blockquote = $(this).parents('blockquote');
+            layer.confirm('确定删除此消息吗?', function (index) {
+                $.ajax({
+                    url: '/message/message.do',
+                    type: 'post',
+                    data: {_method: "DELETE", "id": id},
+                    dataType: 'json',
+                    async: false,
+                    success: function (result) {
+                        if (!result.status) {
+                            layer.msg(result.msg, {icon: 5});
+                            return false;
+                        } else {
+                            blockquote.remove()
+                            layer.msg(result.msg, {icon: 6,})
+                        }
+                    }
+                });
+                layer.close(index);
+            })
+        })
+
+    });
+
+</script>
+</body>
+</html>

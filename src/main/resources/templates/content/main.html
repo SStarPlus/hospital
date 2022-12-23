@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link th:href="@{/resource/css/assets/bootstrap.min.css}" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/resource/css/style.css}"/>
+    <link rel="stylesheet" th:href="@{/resource/css/assets/ace.min.css}"/>
+    <link rel="stylesheet" th:href="@{/resource/css/assets/font-awesome.min.css}"/>
+    <link th:href="@{/resource/css/assets/codemirror.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/resource/css/assets/ace-ie.min.css}"/>
+    <title></title>
+</head>
+<body>
+<div class="page-content clearfix">
+    <div class="alert alert-block alert-success">
+        <button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button>
+        <i class="icon-ok green"></i>欢迎使用<strong class="green">后台管理系统
+        <small>(v1.2)</small>
+    </strong>,你本次登陆时间为<span th:text="${#strings.substring(user.updatedDate,0,19)}"></span>
+    </div>
+    <!--记录-->
+    <div class="clearfix" th:if="${user.roleId eq '1'}">
+        <div class="home_btn">
+            <div>
+                <a href="/office/index.do" title="科室管理" class="btn  btn-primary btn-sm no-radius">
+                    <i class="bigger-200"><img src="/resource/images/icon-cpgl.png"/></i>
+                    <h5 class="margin-top">科室管理</h5>
+                </a>
+                <a href="/user/doctorIndex.do" title="医生管理" class="btn  btn-success btn-sm no-radius">
+                    <i class="bigger-200"><img src="/resource/images/icon-grxx.png"/></i>
+                    <h5 class="margin-top">医生管理</h5>
+                </a>
+                <a href="/wbeSet/wbeParameter.do" title="网站设置" class="btn  btn-info btn-sm no-radius">
+                    <i class="bigger-200"><img src="/resource/images/xtsz.png"/></i>
+                    <h5 class="margin-top">网站设置</h5>
+                </a>
+
+                <a href="/article/index.do" title="文章管理" class="btn  btn-info btn-sm no-radius">
+                    <i class="bigger-200"><img src="/resource/images/icon-addwz.png"/></i>
+                    <h5 class="margin-top">文章管理</h5>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    //面包屑返回值
+    var index = parent.layer.getFrameIndex(window.name);
+    parent.layer.iframeAuto(index);
+    $('.no-radius').on('click', function () {
+        var cname = $(this).attr("title");
+        var chref = $(this).attr("href");
+        var cnames = parent.$('.Current_page').html();
+        var herf = parent.$("#iframe").attr("src");
+        parent.$('#parentIframe').html(cname);
+        parent.$('#iframe').attr("src", chref).ready();
+        ;
+        parent.$('#parentIframe').css("display", "inline-block");
+        parent.$('.Current_page').attr({"name": herf, "href": "javascript:void(0)"}).css({
+            "color": "#4c8fbd",
+            "cursor": "pointer"
+        });
+        // parent.$('.Current_page').html("<a href='javascript:void(0)' name="+herf+" class='iframeurl'>" + cnames + "</a>");
+        parent.layer.close(index);
+
+    });
+    $(document).ready(function () {
+
+        $(".t_Record").width($(window).width() - 640);
+        //当文档窗口发生改变时 触发
+        $(window).resize(function () {
+            $(".t_Record").width($(window).width() - 640);
+        });
+    });
+
+
+</script>

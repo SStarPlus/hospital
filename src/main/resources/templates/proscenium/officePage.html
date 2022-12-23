@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title th:text="${wbeParameter.name}">网站后台管理系统 </title>
+    <link rel="icon" href="/resource/hospital.png"/>
+    <link rel="stylesheet" href="/resource/css/normalize.css" type="text/css"/>
+    <link rel="stylesheet" href="/resource/css/secondary.css" type="text/css"/>
+    <script language="javascript" type="text/javascript" src="/resource/js/Kunyilibrary.js"></script>
+</head>
+<style>
+    .office-content {
+        -webkit-line-clamp: 3;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+<body>
+<header class="header" th:replace="proscenium/public :: header"></header>
+<nav th:replace="proscenium/public :: nav"></nav>
+<section class="BaseMark">
+    <div class="bread">您所在的位置<span><a href="/diplomaProject">首页</a>><a href="/officePage">专科介绍</a></span></div>
+    <div class="baseLeft">
+        <div class="title title05_52">专科介绍</div>
+        <div class="tools">
+            <a>
+                <img src="/resource/images/ico_001.gif" width="52" height="52"><em>互联智慧分诊平台</em>
+            </a>
+            <a style="margin-right:0;" >
+                <img src="/resource/images/ico_002.gif" width="52" height="52"><em><span>96195</span> 综合平台</em>
+            </a>
+            <a >
+                <img src="/resource/images/ico_003.gif" width="52" height="52"><em>名医馆</em>
+            </a>
+            <a style="margin-right:0;" href="/infoSearch" class="last">
+                <img src="/resource/images/ico_004.gif" width="52" height="52"><em>信息查询</em>
+            </a>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div class="baseRight">
+        <div class="title01">科室导航</div>
+        <div class="partChoice">
+            <h1>快速进入科室</h1>
+            <p>请先选择科室所在的医学部然后选择科室名称，即可快速进入您要去的科室。</p>
+        </div>
+        <div class="part">
+            <div class="part01">
+                <ul>
+                    <li th:each="office:${officeList}">
+                        <span class='import1'></span>
+                        <h3 th:text="${office.name}">呼吸内科</h3>
+                        <p class="office-content" th:text="${office.content}"></p>
+                        <div><a class="coffee" th:href="${'/officeDetailsPage?id='+office.id}" title="呼吸内科">查看详细</a>
+                            <a class='green' th:href="${'/doctorPage?officeId='+office.id}" title='呼吸内科医生'>科室医生</a>
+                        </div>
+                    </li>
+                </ul>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>
+</section>
+<div class="BottomHidden"></div>
+<footer th:replace="proscenium/public :: footer"></footer>
+<script language="javascript" type="text/javascript" src="/resource/js/Kunyi.Common.js"></script>
+<script language="javascript" type="text/javascript" src="/resource/js/Kunyi.Secondary.js"></script>
+</body>
+</html>

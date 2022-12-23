@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title th:text="${wbeParameter.name}">网站后台管理系统 </title>
+    <link rel="icon" href="/resource/hospital.png"/>
+    <link rel="stylesheet" href="/resource/css/normalize.css" type="text/css"/>
+    <link rel="stylesheet" href="/resource/css/secondary.css" type="text/css"/>
+    <script language="javascript" type="text/javascript" src="/resource/js/Kunyilibrary.js"></script>
+</head>
+<style>
+    .office-content {
+        -webkit-line-clamp: 3;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+<body>
+<header class="header" th:replace="proscenium/public :: header"></header>
+<nav th:replace="proscenium/public :: nav"></nav>
+<section class="BaseMark">
+    <div class="bread">您所在的位置<span><a href="index.html">首页</a>><a href="">新闻动态</a> > <span
+            th:text="${article.type}"></span></span></div>
+    <div class="baseLeft">
+        <div class="title title05_19">新闻动态</div>
+        <div class="tools">
+            <a>
+                <img src="/resource/images/ico_001.gif" width="52" height="52"><em>互联智慧分诊平台</em>
+            </a>
+            <a style="margin-right:0;" >
+                <img src="/resource/images/ico_002.gif" width="52" height="52"><em><span>96195</span> 综合平台</em>
+            </a>
+            <a >
+                <img src="/resource/images/ico_003.gif" width="52" height="52"><em>名医馆</em>
+            </a>
+            <a style="margin-right:0;" href="/infoSearch" class="last">
+                <img src="/resource/images/ico_004.gif" width="52" height="52"><em>信息查询</em>
+            </a>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div class="baseRight">
+        <div class="title01" th:text="${article.type}"></div>
+        <div class="article detail">
+            <h2 id="H2Title" th:text="${article.title}"></h2>
+            <div id="DIVTool" class="title04">
+                <span id="SPANDate" th:text="${'发布日期：'+#strings.substring(article.time,0,11)}"></span>
+                <span>字号调整<em id="EMChange"><img src="/resource/images/font_ico02.png" width="22" height="23"/>
+                <a class="fot12" href="javascript:;" data-type="0"></a>
+                <a class="fot14" href="javascript:;" data-type="1"></a>
+                <a class="fot16" href="javascript:;" data-type="2"></a></em> <b id="FontState">14px</b></span>
+
+                <div class="itemBase" id="phoneArticle"></div>
+                <div class="itemBase share">
+                    <script type="text/javascript" id="bdshare_js" data="type=button&amp;uid=6713615"></script>
+                    <script type="text/javascript" id="bdshell_js"></script>
+                </div>
+            </div>
+            <div class="clear"></div>
+            <div id="DIVContent" class="DIVContent">
+                <p th:utext="${article.content}"></p>
+            </div>
+
+        </div>
+    </div>
+    <div class="clear"></div>
+</section>
+<div class="BottomHidden"></div>
+<footer th:replace="proscenium/public :: footer"></footer>
+<script language="javascript" type="text/javascript" src="/resource/js/Kunyi.Common.js"></script>
+<script language="javascript" type="text/javascript" src="/resource/js/Kunyi.Secondary.js"></script>
+</body>
+</html>

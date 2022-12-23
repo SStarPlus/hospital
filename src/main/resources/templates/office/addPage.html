@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="/resource/common/layui/css/layui.css" media="all"/>
+</head>
+<style>
+    .lable-span {
+        color: #ea2020;
+        padding-left: 3px
+    }
+
+    .layui-form-radio > i {
+        font-size: 15px;
+    }
+</style>
+<body>
+<div class="layui-form" style="padding: 20px">
+    <div class="layui-form-item">
+        <label class="layui-form-label">科室名称:</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" lay-verify="required" lay-vertype="tips" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">科室电话:</label>
+        <div class="layui-input-block">
+            <input type="text" name="iphone" lay-verify="required" lay-vertype="tips" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">科室大图:</label>
+            <div class="layui-input-inline">
+                <input name="bigImg" id="bigImg" readonly lay-verify="required" lay-vertype="tips" class="layui-input">
+            </div>
+            <div class="layui-input-inline" style="width: auto">
+                <button style="height: 28px;line-height: 28px" type="button" class="layui-btn layui-btn-primary"
+                        id="bigImg-btn"><i class="layui-icon"></i>上传
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">科室logo:</label>
+            <div class="layui-input-inline">
+                <input name="img" id="img" readonly lay-verify="required" lay-vertype="tips" class="layui-input">
+            </div>
+            <div class="layui-input-inline" style="width: auto">
+                <button style="height: 28px;line-height: 28px" type="button" class="layui-btn layui-btn-primary"
+                        id="img-btn"><i
+                        class="layui-icon"></i>上传
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">挂号费:</label>
+        <div class="layui-input-block">
+            <input type="number" name="price" lay-verify="required|price" lay-vertype="tips" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">科室简介:</label>
+        <div class="layui-input-block">
+            <textarea name="description" name="content" autocomplete="off"
+                      class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item" style="position: fixed;bottom: 0px;right: 10px;">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="Submit">保存内容</button>
+            <button type="" class="layui-btn layui-btn-primary close">取消</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/resource/common/layui/layui.js"></script>
+<script type="text/javascript" th:inline="javascript">
+
+    layui.use(['table', 'layer', 'upload', 'form'], function () {
+        var table = layui.table,
+            $ = layui.$,
+            layer = layui.layer,
+            upload = layui.upload,
+            form = layui.form;
+
+        $('.close').on('click', function () {
+            parent.layer.close(parent.layer.getFrameIndex(window.name));
+        })
+        //拖拽上传
+        upload.render({
+            elem: '#img-btn'
+            , url: '/upload.do'
+            , done: function (res) {
+                layer.msg('上传成功');
+                console.log(res)
+                $("#img").val(res.obje);
+            }
+        });
+        //拖拽上传
+        upload.render({
+            elem: '#bigImg-btn'
+            , url: '/upload.do'
+            , done: function (res) {
+                layer.msg('上传成功');
+                console.log(res)
+                $("#bigImg").val(res.obje);
+            }
+        });
+        //自定义验证规则
+        form.verify({
+            price: function (value) {
+                if (!new RegExp("(^[1-9]\\d*(\\.\\d{1,2})?$)|(^0(\\.\\d{1,2})?$)").test(value)) {
+                    return '请输入正确的费用格式:整数或者保留两位小数';
+                }
+            }
+
+        });
+        form.on('submit(Submit)', function (data) {
+            $.ajax({
+                url: '/office/office.do',
+                type: 'post',
+                data: data.field,
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    if (result.status) {
+                        parent.layer.msg("新增成功!", {time: 1000});
+                        parent.layer.close(parent.layer.getFrameIndex(window.name));
+                        parent.layui.table.reload('tableId', {});
+                    } else {
+                        layer.msg(result.msg);
+                    }
+                }
+
+            });
+        });
+    });
+
+</script>
+</body>
+</html>

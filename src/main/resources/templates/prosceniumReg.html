@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title th:text="${wbeParameter.name}">网站后台管理系统 </title>
+    <link rel="icon" href="/resource/hospital.png"/>
+    <link rel="stylesheet" href="/resource/css/normalize.css" type="text/css"/>
+    <link rel="stylesheet" href="/resource/css/secondary.css" type="text/css"/>
+    <link rel="stylesheet" href="/resource/common/layui/css/layui.css" media="all"/>
+    <script language="javascript" type="text/javascript" src="/resource/js/Kunyilibrary.js"></script>
+</head>
+<style>
+    .office-content {
+        -webkit-line-clamp: 3;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .main-yao {
+        width: 600px;
+        margin: 40px auto;
+    }
+
+    .red {
+        color: red;
+    }
+</style>
+<body style="font-size: 12px">
+<header class="header" th:replace="proscenium/public :: header"></header>
+<nav th:replace="proscenium/public :: nav"></nav>
+<section class="BaseMark">
+    <div class="bread">您所在的位置<span><a href="/diplomaProject">首页</a>>
+        <a></a> >用户注册</a></span>
+    </div>
+    <div class="layui-tab layui-tab-card">
+        <ul class="layui-tab-title">
+            <li><a href="/">用户登录</a></li>
+            <li class="layui-this"><a href="/prosceniumReg">用户注册</a></li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="main-yao layui-form">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="red">*&nbsp;</span>身份证号</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="userName" lay-verify="required|identity" lay-vertype="tips"
+                                   autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="red">*&nbsp;</span>姓名</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="realName" lay-verify="required" lay-vertype="tips"
+                                   autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="red">*&nbsp;</span>手机号</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="iphone" lay-verify="required|phone" lay-vertype="tips"
+                                   autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="red">*&nbsp;</span>电子邮件</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="email" lay-verify="required|email" lay-vertype="tips"
+                                   autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="red">*&nbsp;</span>密码</label>
+                        <div class="layui-input-block">
+                            <input type="password" name="plainPassword" lay-verify="required|pass" lay-vertype="tips"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="red">*&nbsp;</span>确认密码</label>
+                        <div class="layui-input-block">
+                            <input type="password" name="affirmPassword" lay-verify="required|pass" lay-vertype="tips"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label"><span class="red">*&nbsp;</span>验证码</label>
+                            <div class="layui-input-inline">
+                                <input type="tel" name="phone" lay-verify="required" lay-vertype="tips"
+                                       autocomplete="off"
+                                       class="layui-input verification-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <div class="layui-input-inline">
+                                <canvas id="canvas" class="Codes_region" style="height: 30px;width: 100px"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1"
+                                    style="background: #6bcbca">注册
+                            </button>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <p><a href="/">去登陆</a></p>
+                        </div>
+                    </div>
+                    <div class="layui-input-block">
+                        <ul class="layui-timeline">
+                            <li class="layui-timeline-item">
+                                <i class="layui-icon layui-timeline-axis"></i>
+                                <div class="layui-timeline-content layui-text">
+                                    <div class="layui-timeline-title">预约挂号采用实名制，请您务必填写患者本人真实信息注册预约。</div>
+                                </div>
+                            </li>
+                            <li class="layui-timeline-item">
+                                <i class="layui-icon layui-timeline-axis"></i>
+                                <div class="layui-timeline-content layui-text">
+                                    <div class="layui-timeline-title">预约系统目前只提供2--8天内的预约挂号。</div>
+                                </div>
+                            </li>
+                            <li class="layui-timeline-item">
+                                <i class="layui-icon layui-timeline-axis"></i>
+                                <div class="layui-timeline-content layui-text">
+                                    <div class="layui-timeline-title">同样的个人信息，当天不能重复预约同一位专家。</div>
+                                </div>
+                            </li>
+                            <li class="layui-timeline-item">
+                                <i class="layui-icon layui-timeline-axis"></i>
+                                <div class="layui-timeline-content layui-text">
+                                    <div class="layui-timeline-title">请完整输入您的信息，并填写正确，凡是标注 “”的内容均为必填项。</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-tab-item">2</div>
+        </div>
+    </div>
+    <div class="clear"></div>
+</section>
+<div class="BottomHidden"></div>
+<footer th:replace="proscenium/public :: footer"></footer>
+<script language="javascript" type="text/javascript" src="/resource/js/Kunyi.Common.js"></script>
+<script language="javascript" type="text/javascript" src="/resource/js/Kunyi.Secondary.js"></script>
+<script type="text/javascript" src="/resource/common/layui/layui.js"></script>
+
+<script type="text/javascript" th:inline="javascript">
+    layui.use(['table', 'layer', 'form'], function () {
+        var table = layui.table,
+            $ = layui.$,
+            layer = layui.layer,
+            form = layui.form;
+        //自定义验证规则
+        form.verify({
+            userName: function (value) {
+                if (value.length < 5) {
+                    return '账号至少得5个字符';
+                }
+            }
+            , pass: [/^[\S]{5,12}$/, '密码必须5到12位，且不能出现空格']
+
+        });
+        //图形验证码
+        var show_num = [];
+        draw(show_num);
+        $("#canvas").on('click', function () {
+            draw(show_num);
+        })
+        //监听提交
+        form.on('submit(demo1)', function (data) {
+            var val = $(".verification-input").val().toLowerCase();
+            var num = show_num.join("");
+            if (val == '') {
+                layer.msg('请输入验证码!', {icon: 5, time: 3000});
+                return false;
+            } else if (val != num) {
+                layer.msg('验证码错误！请重新输入!', {icon: 5, time: 3000});
+                $(".verification-input").val('');
+                return false;
+            }
+            if (data.field.affirmPassword != data.field.plainPassword) {
+                layer.msg('两次密码输入不一致', {icon: 5});
+                return false;
+            }
+            data.field.status = "1"
+            $.ajax({
+                url: '/user/userRegister.do',
+                type: 'post',
+                dataType: 'json',
+                data: data.field,
+                async: false,
+                success: function (result) {
+                    console.log(result)
+                    if (result.status) {
+                        alert("注册成功！")
+                        location.href = "/";
+                    } else {
+                        layer.msg(result.msg, {time: 2000});
+                    }
+                }
+
+            });
+        });
+
+        //生成验证码的函数
+        function draw(show_num) {
+            var canvas_width = $('#canvas').width();
+            var canvas_height = $('#canvas').height();
+            var canvas = document.getElementById("canvas");//获取到canvas的对象，演员
+            var context = canvas.getContext("2d");//获取到canvas画图的环境，演员表演的舞台
+            canvas.width = canvas_width;
+            canvas.height = canvas_height;
+            var sCode = "a,b,c,d,e,f,g,h,i,j,k,m,n,p,q,r,s,t,u,v,w,x,y,z,A,B,C,E,F,G,H,J,K,L,M,N,P,Q,R,S,T,W,X,Y,Z,1,2,3,4,5,6,7,8,9,0";
+            var aCode = sCode.split(",");
+            var aLength = aCode.length;//获取到数组的长度
+            for (var i = 0; i < 4; i++) { //这里的for循环可以控制验证码位数（如果想显示6位数，4改成6即可）
+                var j = Math.floor(Math.random() * aLength);//获取到随机的索引值
+                // var deg = Math.random() * 30 * Math.PI / 180;//产生0~30之间的随机弧度
+                var deg = Math.random() - 0.5; //产生一个随机弧度
+                var txt = aCode[j];//得到随机的一个内容
+                show_num[i] = txt.toLowerCase();
+                var x = 7 + i * 20;//文字在canvas上的x坐标
+                var y = 20 + Math.random() * 8;//文字在canvas上的y坐标
+                context.font = "bold 21px 微软雅黑";
+                context.translate(x, y);
+                context.rotate(deg);
+                context.fillStyle = randomColor();
+                context.fillText(txt, 0, 0);
+                context.rotate(-deg);
+                context.translate(-x, -y);
+            }
+            for (var i = 0; i <= 5; i++) { //验证码上显示线条
+                context.strokeStyle = randomColor();
+                context.beginPath();
+                context.moveTo(Math.random() * canvas_width, Math.random() * canvas_height);
+                context.lineTo(Math.random() * canvas_width, Math.random() * canvas_height);
+                context.stroke();
+            }
+            for (var i = 0; i <= 30; i++) { //验证码上显示小点
+                context.strokeStyle = randomColor();
+                context.beginPath();
+                var x = Math.random() * canvas_width;
+                var y = Math.random() * canvas_height;
+                context.moveTo(x, y);
+                context.lineTo(x + 1, y + 1);
+                context.stroke();
+            }
+        }
+
+        //得到随机的颜色值
+        function randomColor() {
+            var r = Math.floor(Math.random() * 256);
+            var g = Math.floor(Math.random() * 256);
+            var b = Math.floor(Math.random() * 256);
+            return "rgb(" + r + "," + g + "," + b + ")";
+        }
+
+    });
+</script>
+</body>
+</html>

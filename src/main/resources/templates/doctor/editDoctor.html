@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="/resource/common/layui/css/layui.css" media="all"/>
+</head>
+<body>
+<div class="layui-form" style="padding: 20px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">工号:<span style="color: red">*</span></label>
+        <div class="layui-input-block">
+            <input type="text" name="userName" lay-vertype="tips" th:value="${user.userName}" lay-verify="required"
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">性别:<span style="color: red">*</span></label>
+        <div class="layui-input-block">
+            <input type="radio" name="sex" value="男" th:field="*{user.sex}" title="男">
+            <input type="radio" name="sex" value="女" th:field="*{user.sex}" title="女">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓氏:<span style="color: red">*</span></label>
+        <div class="layui-input-block">
+            <input type="text" name="realName" th:value="${user.realName}" lay-verify="required" lay-vertype="tips"
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">手机:<span style="color: red">*</span></label>
+        <div class="layui-input-block">
+            <input type="text" name="iphone" th:value="${user.iphone}" lay-verify="phone" lay-vertype="tips"
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">E-mail:<span style="color: red">*</span></label>
+        <div class="layui-input-block">
+            <input type="text" name="email" th:value="${user.email}" lay-verify="email" lay-vertype="tips"
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">所属科室:<span style="color: red">*</span></label>
+        <div class="layui-input-block">
+            <select name="officeId" lay-verify="required" lay-vertype="tips">
+                <option th:each="item:${officeList}" th:selected="${item.id eq user.officeId}" th:text="${item.name}"
+                        th:value="${item.id}"></option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">头衔:<span style="color: red">*</span></label>
+        <div class="layui-input-block">
+            <input type="text" name="title" lay-verify="title" th:value="${user.title}" lay-vertype="tips"
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">照片:<span style="color: red">*</span></label>
+            <div class="layui-input-inline">
+                <input name="imgUrl" id="imgUrl" th:value="${user.imgUrl}" readonly lay-verify="required"
+                       lay-vertype="tips" class="layui-input">
+            </div>
+            <div class="layui-input-inline" style="width: auto">
+                <button style="height: 28px;line-height: 28px" type="button" class="layui-btn layui-btn-primary"
+                        id="img-btn"><i
+                        class="layui-icon"></i>上传
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">个人简介:</label>
+        <div class="layui-input-block">
+            <textarea name="description" name="content" th:text="${user.content}" autocomplete="off"
+                      class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input name="id" hidden th:value="${user.id}">
+            <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="Submit">
+                保存
+            </button>
+            <button type="" class="layui-btn layui-btn-primary close">
+                取消
+            </button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/resource/common/layui/layui.js"></script>
+<script type="text/javascript">
+    layui.use(['form', 'upload'], function () {
+        var $ = layui.$,
+            upload = layui.upload,
+            form = layui.form;
+        $('.close').on('click', function () {
+            parent.layer.close(parent.layer.getFrameIndex(window.name));
+        })
+        //拖拽上传
+        upload.render({
+            elem: '#img-btn'
+            , url: '/upload.do'
+            , done: function (res) {
+                layer.msg('上传成功');
+                console.log(res)
+                $("#imgUrl").val(res.obje);
+            }
+        });
+        form.verify({
+            pass: [/^[\S]{6,12}$/, '密码必须6到12位，且不能出现空格']
+        });
+        form.on('submit(Submit)', function (data) {
+            $.ajax({
+                url: '/user/user.do',
+                type: 'put',
+                data: data.field,
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    if (!result.status) {
+                        parent.layer.msg(result.msg, {time: 2000});
+                        return false;
+                    } else {
+                        parent.layer.msg("编辑成功!", {time: 1000});
+                        parent.layer.close(parent.layer.getFrameIndex(window.name));
+                        parent.layui.table.reload('tableId', {});
+                    }
+                }
+
+            });
+        });
+    });
+
+</script>
+</body>
+</html>

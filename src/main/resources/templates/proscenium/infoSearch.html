@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title th:text="${wbeParameter.name}">网站后台管理系统 </title>
+    <link rel="icon" href="/resource/hospital.png"/>
+    <link rel="stylesheet" href="/resource/css/normalize.css" type="text/css"/>
+    <link rel="stylesheet" href="/resource/css/secondary.css" type="text/css"/>
+    <link rel="stylesheet" href="/resource/common/layui/css/layui.css" media="all"/>
+    <script language="javascript" type="text/javascript" src="/resource/js/Kunyilibrary.js"></script>
+</head>
+<style>
+
+    .layui-input {
+        margin-top: 5px;
+    }
+
+    .layui-table tr th {
+        color: #6bcbca !important;
+        font-family: 微软雅黑;
+    }
+</style>
+<body style="font-size: 12px;">
+<header class="header" th:replace="proscenium/public :: header"></header>
+<nav th:replace="proscenium/public :: nav"></nav>
+<section class="BaseMark">
+    <div class="bread">您所在的位置<span><a href="/diplomaProject">首页</a>><a>信息查询</a></span></div>
+    <div class="baseLeft">
+        <div class="tools">
+            <a>
+                <img src="/resource/images/ico_001.gif" width="52" height="52"><em>互联智慧分诊平台</em>
+            </a>
+            <a style="margin-right:0;" >
+                <img src="/resource/images/ico_002.gif" width="52" height="52"><em><span>96195</span> 综合平台</em>
+            </a>
+            <a >
+                <img src="/resource/images/ico_003.gif" width="52" height="52"><em>名医馆</em>
+            </a>
+            <a style="margin-right:0;" href="/infoSearch" class="last">
+                <img src="/resource/images/ico_004.gif" width="52" height="52"><em>信息查询</em>
+            </a>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div class="baseRight">
+        <div class="title01">信息查询</div>
+        <div class="Expert" style="padding-top: 20px">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">身份证号</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" th:value="${userName}" id="userName">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <button class="layui-btn-sm layui-btn search" style="width: 100px;background: #6bcbca">查询
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <table class="layui-table" th:if="${case !=null}">
+                <tbody>
+                <tr>
+                    <td>病例编号</td>
+                    <td colspan="2" th:text="${case.uuId}"></td>
+                    <td>身份证号</td>
+                    <td colspan="2" th:text="${case.userName}"></td>
+                </tr>
+                <tr>
+                    <td>姓名</td>
+                    <td th:text="${case.name}"></td>
+                    <td>年龄</td>
+                    <td th:text="${case.age}"></td>
+                    <td>性别</td>
+                    <td th:text="${case.sex}"></td>
+                </tr>
+                <tr>
+                    <td>主述</td>
+                    <td colspan="5" th:text="${case.selfSay}"></td>
+                </tr>
+                <tr>
+                    <td>诊断结果</td>
+                    <td colspan="5" th:text="${case.consequence}"></td>
+                </tr>
+                <tr>
+                    <td>治疗方案</td>
+                    <td colspan="5" th:text="${case.scheme}"></td>
+                </tr>
+                <tr>
+                    <td>诊断医生</td>
+                    <td colspan="5" th:text="${case.doctorName}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="layui-table" th:if="${case ==null && uuId != null}">
+                <tbody>
+                <tr>
+                    <td>未查询到任何信息!</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</section>
+<div class="BottomHidden"></div>
+<footer th:replace="proscenium/public :: footer"></footer>
+<script language="javascript" type="text/javascript" src="/resource/js/Kunyi.Common.js"></script>
+<script language="javascript" type="text/javascript" src="/resource/js/Kunyi.Secondary.js"></script>
+<script type="text/javascript" src="/resource/common/layui/layui.js"></script>
+<script type="text/javascript" th:inline="javascript">
+    layui.use(['table', 'layer', 'form'], function () {
+        var table = layui.table,
+            $ = layui.$,
+            layer = layui.layer,
+            form = layui.form;
+        //查询
+        $('.search').on('click', function () {
+            var userName = $('#userName').val();
+            location.href = '/infoSearch?userName=' + userName
+        })
+    });
+</script>
+</body>
+</html>

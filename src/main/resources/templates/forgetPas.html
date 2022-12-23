@@ -1,0 +1,117 @@
+<!DOCTYPE html >
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link href="/resource/css/assets/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/resource/css/assets/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/resource/css/assets/ace.min.css"/>
+    <link rel="stylesheet" href="/resource/css/assets/ace-rtl.min.css"/>
+    <link rel="stylesheet" href="/resource/css/assets/ace-skins.min.css"/>
+    <link rel="stylesheet" href="/resource/css/style.css"/>
+    <link rel="stylesheet" href="/resource/css/assets/ace-ie.min.css"/>
+    <title th:text="${wbeParameter.name}">登陆</title>
+    <link rel="shortcut icon" th:href="${wbeParameter.logo}">
+</head>
+<body class="login-layout Reg_log_style">
+<div class="logintop">
+    <span>欢迎后台管理界面平台</span>
+
+</div>
+<div class="loginbody">
+    <div class="login-container">
+        <div class="center">
+            <span th:text="${wbeParameter.name}" style="font-weight: bolder;font-size:25px;color: white"></span>
+        </div>
+        <div class="space-6"></div>
+        <div class="position-relative">
+            <div id="login-box" class="login-box widget-box no-border visible">
+                <div class="widget-body">
+                    <div class="widget-main">
+                        <h4 class="header blue lighter bigger">
+                            <i class="icon-coffee green"></i>
+                            密码找回
+                        </h4>
+                        <div class="login_icon"><img src="/resource/images/login.png"/></div>
+                        <div class="layui-form">
+                            <fieldset>
+                                <ul>
+                                    <li class="frame_style form_error">
+                                        <label class="user_icon"></label>
+                                        <input type="text" name="userName" lay-verify="required|userName"
+                                               class="layui-input"
+                                               placeholder="用户名" autocomplete="off"/>
+                                    </li>
+                                    <li class="frame_style form_error">
+                                        <label class="user_icon"></label>
+                                        <input type="text" id="toEmail" name="toEmail"
+                                               lay-verify="required|email"
+                                               placeholder="电子邮件地址" autocomplete="off"/>
+                                    </li>
+                                </ul>
+                                <div class="space"></div>
+                                <div class="clearfix">
+                                    <label class="inline">
+                                        <a class="lbl" href="/diplomaProjectAdmin">去登陆</a>
+                                    </label>
+                                    <button type="button" class="width-35 pull-right btn btn-sm btn-primary"
+                                            id="login_btn" lay-submit="" lay-filter="Submit">
+                                        <i class="icon-key"></i>立即发送
+                                    </button>
+                                </div>
+                                <div class="space-4"></div>
+                            </fieldset>
+                        </div>
+                        <div class="social-or-login center">
+                            <span class="bigger-110">通知</span>
+                        </div>
+
+                        <div class="social-login center">
+                            本网站系统不再对IE8以下浏览器支持，请见谅。
+                        </div>
+                    </div>
+                    <div class="toolbar clearfix">
+                    </div>
+                </div><!-- /widget-body -->
+            </div><!-- /login-box -->
+        </div><!-- /position-relative -->
+    </div>
+</div>
+<div class="loginbm">版权所有 2022 <a th:text="${wbeParameter.name}"></a></div>
+<strong></strong>
+<script src="/resource/js/assets/ace-extra.min.js"></script>
+<script src="/resource/js/assets/html5shiv.js"></script>
+<script src="/resource/js/assets/respond.min.js"></script>
+<script src="/resource/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="/resource/common/layui/layui.js"></script>
+<script type="text/javascript">
+    layui.use(['table', 'layer', 'laydate', 'upload', 'form'], function () {
+        var table = layui.table,
+            $ = layui.$,
+            layer = layui.layer,
+            upload = layui.upload,
+            form = layui.form;
+        form.on('submit(Submit)', function (data) {
+            $.ajax({
+                url: '/retrievePass',
+                type: 'post',
+                data: data.field,
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    if (!result.status) {
+                        layer.msg(result.msg, {time: 2000});
+                        return false;
+                    } else {
+                        layer.msg("密码已发送至邮箱!", {time: 2000});
+                        $('#toEmail').val("")
+                        $('#userName').val("")
+                    }
+                }
+
+            });
+        });
+    });
+
+</script>
+</body>
+</html>

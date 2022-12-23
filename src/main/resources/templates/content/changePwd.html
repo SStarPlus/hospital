@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="/resource/common/layui/css/layui.css" media="all"/>
+</head>
+<body>
+<div class="layui-form" style="padding: 40px">
+    <div class="layui-form-item">
+        <label class="layui-form-label">旧密码:</label>
+        <div class="layui-input-block">
+            <input type="text" name="oldPas" lay-verify="required|pass" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">新密码:</label>
+        <div class="layui-input-block">
+            <input type="text" name="newPas" lay-verify="required|pass" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">确认密码:</label>
+        <div class="layui-input-block">
+            <input type="text" name="confirmPas" lay-verify="required|pass" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item" style="position: fixed;bottom: 0px;right: 10px">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="changePwd">保存内容</button>
+            <button type="" class="layui-btn layui-btn-primary close">取消</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/resource/common/layui/layui.js"></script>
+<script type="text/javascript">
+    layui.use(['table', 'layer', 'laydate', 'form'], function () {
+        var table = layui.table,
+            $ = layui.$,
+            layer = layui.layer,
+            form = layui.form;
+        $('.close').on('click', function () {
+            parent.layer.close(parent.layer.getFrameIndex(window.name));
+        })
+        //自定义验证规则
+        form.verify({
+            pass: [/^[\S]{6,12}$/, '密码必须6到12位，且不能出现空格']
+        });
+        form.on('submit(changePwd)', function (data) {
+            if (data.field.newPas != data.field.confirmPas) {
+                parent.layer.msg('两次密码输入不一致', {icon: 5});
+                return false;
+            }
+            $.ajax({
+                url: '/updatePas',
+                type: 'post',
+                data: data.field,
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    if (!result.status) {
+                        parent.layer.msg(result.msg, {time: 2000});
+                        return false;
+                    } else {
+                        parent.layer.msg("修改成功!", {time: 1000});
+                        parent.layer.close(parent.layer.getFrameIndex(window.name));
+                    }
+                }
+
+            });
+        });
+    });
+
+</script>
+</body>
+</html>

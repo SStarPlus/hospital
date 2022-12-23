@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title th:text="${wbeParameter.name}">网站后台管理系统 </title>
+    <link rel="icon" href="/resource/hospital.png"/>
+    <link rel="stylesheet" href="/resource/css/normalize.css" type="text/css"/>
+    <link rel="stylesheet" href="/resource/css/secondary.css" type="text/css"/>
+    <script language="javascript" type="text/javascript" src="/resource/js/Kunyilibrary.js"></script>
+</head>
+<style>
+    .office-content {
+        -webkit-line-clamp: 3;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+<body>
+<header class="header" th:replace="proscenium/public :: header"></header>
+<nav th:replace="proscenium/public :: nav"></nav>
+<section class="BaseMark">
+    <div class="bread">您所在的位置<span><a href="index.html">首页</a>><a href="/articlePage">新闻动态</a> > <span
+            th:text="${type}"></span></span></div>
+    <div class="baseLeft">
+        <div class="title title05_19">新闻动态</div>
+        <div class="newsMenu">
+            <ul>
+                <li class="first active"><a href="/articlePage?type=省医快讯" title="省医快讯"><em>省医快讯</em></a></li>
+                <li><a href="/noticePage?type=最新公告" title="最新公告"><em>最新公告</em></a></li>
+            </ul>
+        </div>
+        <div class="tools">
+            <a>
+                <img src="/resource/images/ico_001.gif" width="52" height="52"><em>互联智慧分诊平台</em>
+            </a>
+            <a style="margin-right:0;" >
+                <img src="/resource/images/ico_002.gif" width="52" height="52"><em><span>96195</span> 综合平台</em>
+            </a>
+            <a >
+                <img src="/resource/images/ico_003.gif" width="52" height="52"><em>名医馆</em>
+            </a>
+            <a style="margin-right:0;" href="/infoSearch" class="last">
+                <img src="/resource/images/ico_004.gif" width="52" height="52"><em>信息查询</em>
+            </a>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div class="baseRight">
+        <div class="title01" th:text="${type}"></div>
+        <div class="clear"></div>
+        <div class="newList">
+            <ul>
+                <li th:each="article:${articleList}">
+                    <div class="headLines">
+                        <a th:href="${'/articleDetailsPage?id='+article.id}" class="title"
+                           th:text="${article.title}"></a>
+                        <div th:utext="${article.content}"
+                             style="height:45px;overflow : hidden;text-overflow: ellipsis;display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;"></div>
+                    </div>
+                    <div class="date"><h3>发布时间</h3><h4 th:text="${#strings.substring(article.time,0,11)}"></h4></div>
+                    <div class="listBtn"><a th:href="${'/articleDetailsPage?id='+article.id}">进入</a></div>
+                    <div class="clear"></div>
+                </li>
+            </ul>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</section>
+<div class="BottomHidden"></div>
+<footer th:replace="proscenium/public :: footer"></footer>
+<script language="javascript" type="text/javascript" src="/resource/js/Kunyi.Common.js"></script>
+<script language="javascript" type="text/javascript" src="/resource/js/Kunyi.Secondary.js"></script>
+</body>
+</html>

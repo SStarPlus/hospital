@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="/resource/common/layui/css/layui.css" media="all"/>
+</head>
+<style>
+    .lable-span {
+        color: #ea2020;
+        padding-left: 3px
+    }
+
+    .layui-form-radio > i {
+        font-size: 15px;
+    }
+
+    .laydate_body .laydate_top {
+        width: 100%;
+    }
+
+    .layui-form-select dl {
+        z-index: 99999;
+    }
+</style>
+<body>
+<div class="layui-form" style="padding: 20px">
+    <div class="layui-form-item">
+        <div class="">
+            <textarea type="text" id="description" name="description" lay-verify="" lay-vertype="tips"
+                      autocomplete="off"
+                      class="layui-textarea" style="height: 300px"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item" style="position: fixed;bottom: 0px;right: 10px;">
+        <div class="layui-input-block">
+            <input type="hidden" id="visitId" th:value="${visitId}" name="visitId">
+            <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="Submit">确认挂号</button>
+            <button type="" class="layui-btn layui-btn-primary close">取消</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/resource/js/wangEditor.min.js"></script>
+<script type="text/javascript" src="/resource/js/assets/laydate/laydate.js"></script>
+<script type="text/javascript" src="/resource/common/layui/layui.js"></script>
+<script type="text/javascript" th:inline="javascript">
+    layui.use(['table', 'layer', 'form'], function () {
+        var E = window.wangEditor
+        var editor = new E('#content')
+        editor.create()
+        var table = layui.table,
+            $ = layui.$,
+            layer = layui.layer,
+            laydate = layui.laydate,
+            form = layui.form;
+        $('.close').on('click', function () {
+            parent.layer.close(parent.layer.getFrameIndex(window.name));
+        })
+        form.on('submit(Submit)', function (data) {
+            $.ajax({
+                url: '/registration/registration.do',
+                type: 'post',
+                data: data.field,
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    if (!result.status) {
+                        layer.msg(result.msg, {time: 2000});
+                        return false;
+                    } else {
+                        layer.msg("预约挂号成功!", {
+                            time: 900, end: function () {
+                                parent.location.reload()
+                                parent.layer.close(parent.layer.getFrameIndex(window.name));
+                            }
+                        })
+                    }
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

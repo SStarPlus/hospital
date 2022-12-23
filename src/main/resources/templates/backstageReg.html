@@ -1,0 +1,135 @@
+<!DOCTYPE html >
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link href="/resource/css/assets/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/resource/css/assets/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/resource/css/assets/ace.min.css"/>
+    <link rel="stylesheet" href="/resource/css/assets/ace-rtl.min.css"/>
+    <link rel="stylesheet" href="/resource/css/assets/ace-skins.min.css"/>
+    <link rel="stylesheet" href="/resource/css/style.css"/>
+    <link rel="stylesheet" href="/resource/css/assets/ace-ie.min.css"/>
+    <title th:text="${wbeParameter.name}">登陆</title>
+    <link rel="shortcut icon" th:href="${wbeParameter.logo}">
+</head>
+<body class="login-layout Reg_log_style">
+<div class="logintop">
+    <span>欢迎后台管理界面平台</span>
+
+</div>
+<div class="loginbody">
+    <div class="login-container">
+        <div class="center">
+            <span th:text="${wbeParameter.name}" style="font-weight: bolder;font-size:25px;color: white"></span>
+        </div>
+        <div class="space-6"></div>
+        <div class="position-relative">
+            <div id="login-box" class="login-box widget-box no-border visible">
+                <div class="widget-body">
+                    <div class="widget-main">
+                        <h4 class="header blue lighter bigger">
+                            <i class="icon-coffee green"></i>
+                            账号注册
+                        </h4>
+                        <div class="login_icon"><img src="/resource/images/login.png"/></div>
+                        <div class="layui-form">
+                            <fieldset>
+                                <ul>
+                                    <li class="frame_style form_error">
+                                        <label class="user_icon"></label>
+                                        <input type="text" name="userName" lay-verify="required|userName"
+                                               class="layui-input"
+                                               placeholder="用户名" autocomplete="off"/>
+                                    </li>
+                                    <li class="frame_style form_error">
+                                        <label class="password_icon"></label>
+                                        <input type="password" name="plainPassword" lay-verify="required|pass"
+                                               placeholder="密码" autocomplete="off"/>
+                                    </li>
+                                    <li class="frame_style form_error">
+                                        <label class="password_icon"></label>
+                                        <input type="password" name="affirmPassword" lay-verify="required|pass"
+                                               placeholder="确认密码" autocomplete="off"/>
+                                    </li>
+                                </ul>
+                                <div class="space"></div>
+                                <div class="clearfix">
+                                    <label class="inline">
+                                        <a class="lbl" href="/diplomaProjectAdmin">去登陆</a>
+                                    </label>
+                                    <button type="button" class="width-35 pull-right btn btn-sm btn-primary"
+                                            id="login_btn" lay-submit="" lay-filter="demo1">
+                                        <i class="icon-key"></i>注册
+                                    </button>
+                                </div>
+                                <div class="space-4"></div>
+                            </fieldset>
+                        </div>
+                        <div class="social-or-login center">
+                            <span class="bigger-110">通知</span>
+                        </div>
+
+                        <div class="social-login center">
+                            本网站系统不再对IE8以下浏览器支持，请见谅。
+                        </div>
+                    </div>
+                    <div class="toolbar clearfix">
+                    </div>
+                </div><!-- /widget-body -->
+            </div><!-- /login-box -->
+        </div><!-- /position-relative -->
+    </div>
+</div>
+<div class="loginbm">版权所有 2022 <a th:text="${wbeParameter.name}"></a></div>
+<strong></strong>
+<script src="/resource/js/assets/ace-extra.min.js"></script>
+<script src="/resource/js/assets/html5shiv.js"></script>
+<script src="/resource/js/assets/respond.min.js"></script>
+<script src="/resource/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="/resource/common/layui/layui.js"></script>
+<script>
+    layui.use(['carousel', 'form', 'layer'], function () {
+        var carousel = layui.carousel
+            , layer = layui.layer
+            , $ = layui.$
+            , form = layui.form;
+
+        //自定义验证规则
+        form.verify({
+            userName: function (value) {
+                if (value.length < 5) {
+                    return '账号至少得5个字符';
+                }
+            }
+            , pass: [/^[\S]{6,12}$/, '密码必须6到12位，且不能出现空格']
+        });
+        //监听提交
+        form.on('submit(demo1)', function (data) {
+            if (data.field.affirmPassword != data.field.plainPassword) {
+                layer.msg('两次密码输入不一致', {icon: 5});
+                return false;
+            }
+            data.field.status = "1"
+            $.ajax({
+                url: '/user/userRegister.do',
+                type: 'post',
+                dataType: 'json',
+                data: data.field,
+                async: false,
+                success: function (result) {
+                    console.log(result)
+                    if (result.status) {
+                        alert("注册成功！")
+                        location.href = "/loginShiro";
+                    } else {
+                        layer.msg(result.msg, {time: 2000});
+                    }
+                }
+
+            });
+        });
+    });
+
+</script>
+</body>
+</html>
